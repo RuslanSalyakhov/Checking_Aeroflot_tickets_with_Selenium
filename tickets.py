@@ -62,8 +62,13 @@ def get_cheap_tickets(soup, threshold):
     return tickets
   
 # check_tickets function checks tickets for specific date and strictly below the specific price threshhold
-def check_tickets(date= '11.08.2023', threshold = 20000):
+def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток'):
+    # For Google Chrome webdriver
     #driver = webdriver.Chrome(executable_path=r"C:\Users\seymo\Documents\chromium\chromedriver.exe")
+    # Starting from Selenium version Selenium 4.6 or greater
+    #service = webdriver.ChromeService(executable_path=r"C:\Users\seymo\Documents\chromium\chromedriver.exe")
+    #driver = webdriver.Chrome(service=service)
+    
     # Define driver we are going to use. Chrome executable location should be added in the variable Path
     driver = webdriver.Firefox()
 
@@ -101,13 +106,13 @@ def check_tickets(date= '11.08.2023', threshold = 20000):
     # Enter origin location
     source = driver.find_element(By.XPATH, '//*[@placeholder="Откуда"]')
     source.clear()
-    source.send_keys("Санкт-Петербург")
+    source.send_keys(from_city)
     source.send_keys(Keys.ENTER)
 
     # Enter destination place
     target = driver.find_element(By.XPATH, '//*[@placeholder="Куда"]')
     target.clear()
-    target.send_keys("Владивосток")
+    target.send_keys(to_city)
     target.send_keys(Keys.ENTER)
 
     # Enter date of the trip
@@ -178,7 +183,13 @@ if __name__ == "__main__":
     parser.add_argument('from_date', type=str, help='Ticket date in the format: DD.MM.YYYY; i.e 11.08.2023')
 
     # Add argument for ticket price limit. So the script will be looking for tickets with price lower than limit
-    parser.add_argument('limit', type=float, help='The price limit for ticket in formatt: 20000; any number')
+    parser.add_argument('limit', type=float, help='The price limit for ticket in format: 20000; any number')
+
+    # Add argument for city of departure
+    parser.add_argument('from_city', type=str, help='The departure city')
+
+    # Add argument for destination city
+    parser.add_argument('to_city', type=str, help='The destination city')
 
     args = parser.parse_args()
 
@@ -189,7 +200,7 @@ if __name__ == "__main__":
     run_flag = True
     while run_flag:
         print(f"\nRunning script for date: {args.from_date} ; price limit: {args.limit} - timestamp: {datetime.now()}")
-        return_flag = check_tickets(date=args.from_date, threshold=args.limit)
+        return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city)
 
         # Sleep 600 seconds - 10 minutes till next run.
         time.sleep(600)
