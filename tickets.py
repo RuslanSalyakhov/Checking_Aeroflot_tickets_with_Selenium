@@ -73,7 +73,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
     driver = webdriver.Firefox()
 
     # Url of page to check tickets
-    url = "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
+    url = "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=b6hc4k"
 
     # Open URL
     driver.get(url)
