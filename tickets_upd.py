@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 from argparse import ArgumentParser
 
