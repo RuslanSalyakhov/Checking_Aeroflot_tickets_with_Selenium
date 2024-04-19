@@ -40,6 +40,25 @@ def send_message(message):
 
     print(requests.get(url).json()) # this sends the message
     return 0
+
+def get_range_dates(start_date_str: str, end_date_str: str):
+
+    # Convert start and end dates to datetime objects
+    start_date = datetime.strptime(start_date_str, "%d.%m.%Y")
+    end_date = datetime.strptime(end_date_str, "%d.%m.%Y")
+
+    # Initialize an empty list to store the dates
+    date_list = []
+
+    # Iterate over the range of dates and append each date to the list
+    current_date = start_date
+    while current_date <= end_date:
+        date_list.append(current_date.strftime("%d.%m.%Y"))
+        current_date += timedelta(days=1)
+
+    # Print the list of dates
+    print(date_list)
+    return date_list
   
 # get_cheap_tickets using as an input Beatiful soup's parser output and price threshold 
 # returning the list with nested dicts where the price is stricly below the threshold
