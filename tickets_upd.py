@@ -97,7 +97,7 @@ def get_cheap_tickets(soup, threshold, range_flag = False):
             
         
 # check_tickets function checks tickets for specific date and strictly below the specific price threshhold
-def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток'):
+def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток', end_date = ''):
     # For Google Chrome webdriver
     #driver = webdriver.Chrome(executable_path=r"C:\Users\seymo\Documents\chromium\chromedriver.exe")
     # Starting from Selenium version Selenium 4.6 or greater
