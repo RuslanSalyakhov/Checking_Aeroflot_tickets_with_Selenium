@@ -97,13 +97,15 @@ def get_cheap_tickets(soup, threshold, range_flag = False):
             
         
 # check_tickets function checks tickets for specific date and strictly below the specific price threshhold
-def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток', end_date = ''):
-    #driver = webdriver.Chrome(executable_path=r"C:\Users\seymo\OneDrive\Рабочий стол\Aeroflot tickets\chromedriver.exe")
-    #driver = webdriver.Chrome(executable_path=r"C:\Users\seymo\Documents\chromedriver.exe")
-    service = webdriver.ChromeService(executable_path=r'C:\Users\seymo\OneDrive\Рабочий стол\Aeroflot tickets\chromedriver.exe')
-    driver = webdriver.Chrome(service=service)
+def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток'):
+    # For Google Chrome webdriver
+    #driver = webdriver.Chrome(executable_path=r"C:\Users\seymo\Documents\chromium\chromedriver.exe")
+    # Starting from Selenium version Selenium 4.6 or greater
+    #service = webdriver.ChromeService(executable_path=r"C:\Users\seymo\Documents\chromium\chromedriver.exe")
+    #driver = webdriver.Chrome(service=service)
+    
     # Define driver we are going to use. Chrome executable location should be added in the variable Path
-    #driver = webdriver.Firefox()
+    driver = webdriver.Firefox()
 
     # Url of page to check tickets
     url = "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=b6hc4k"
