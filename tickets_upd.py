@@ -289,7 +289,7 @@ if __name__ == "__main__":
     run_flag = True
     while run_flag:
         print(f"\nRunning script for date: {args.from_date} ; price limit: {args.limit} - timestamp: {datetime.now()}")
-        return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city)
+        return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
 
         # Sleep 600 seconds - 10 minutes till next run.
         time.sleep(600)
