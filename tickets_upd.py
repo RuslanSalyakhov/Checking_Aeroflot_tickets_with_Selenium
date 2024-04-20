@@ -18,7 +18,7 @@ TOKEN = "Some Telegram token"
 chat_id = "Some Telegram chat ID"
 
 # If tickets for asked dates and below the price threshold found send_message function sends a message to the Telegram chat
-def send_message(message):
+def send_message(message: str, to_city: str):
 
     mes = ''
 
@@ -32,7 +32,7 @@ def send_message(message):
         mes = ''
         for i in message:
             mes +=  f"\nНайден билет c ценой {i['price']}. \nДата: {i['day']} - {i['number']}\n"
-    mes = "Билеты во Владивосток!\n" + mes + "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
+    mes = f"Билеты в {str(to_city)}!\n" + mes + "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
     # Url to connect to Telegram bot
     #url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
     #print(requests.get(url).json())
@@ -213,7 +213,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
             
             # Click on Find button
             find_tickets.click()
-            #time.sleep(5)
+            
             
             try:
             # Wait till tickets info downloaded by checking if the element button is clickable
@@ -221,7 +221,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
                     EC.element_to_be_clickable((By.CSS_SELECTOR, ".button.button--wide.button--lg")))
             except NoSuchElementException:
                 print("Cannot click on Find element and extract data!")
-            
+            time.sleep(3)
             # Parse a page using BeatifulSoup saving output to the variable
             soup = BeautifulSoup(driver.page_source, 'html.parser')
             
@@ -248,7 +248,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
     else:
         print(f"\nget_cheap_tickets() output: {tickets} \n")
         # Send tickets to Telegram
-        send_message(tickets)
+        send_message(tickets, to_city)
 
         # Wait 10 seconds before closing driver
         time.sleep(10)
@@ -297,8 +297,11 @@ if __name__ == "__main__":
         if return_flag:
             # Setup counter to count number of send notifications via Telegram bot
             count += 1
-
+            
             # Counter will be counting up to 10 before stoping the script
             if count == 10:
                 # Break the loop
                 break
+        # Reset count when a value of return_flag is false         
+        elif not return_flag:
+            count = 0
