@@ -25,7 +25,7 @@ pip3 install selenium
 
 Make script file executable in order to run it
 ```bash
-chmod +x tickets.py
+chmod +x tickets_upd.py
 ```
 In order for Selenium to be able to communicate with the Firefox browser – download **GeckoDriver** for your system from this [link](https://github.com/mozilla/geckodriver/releases) via browser or use wget
 ```bash
@@ -37,5 +37,5 @@ sudo tar -xzvf geckodriver -C /usr/local/bin
 ```
 Change to the script directory and run it providing required arguments
 ```bash
-./tickets.py 11.08.2023 20000
+./tickets_upd.py 11.08.2023 20000
 ```
