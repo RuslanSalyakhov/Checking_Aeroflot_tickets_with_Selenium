@@ -217,11 +217,11 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
             
             try:
             # Wait till tickets info downloaded by checking if the element button is clickable
-                found_item = WebDriverWait(driver, 10).until(
+                found_item = WebDriverWait(driver, 15).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, ".button.button--wide.button--lg")))
             except NoSuchElementException:
                 print("Cannot click on Find element and extract data!")
-            time.sleep(3)
+            time.sleep(4)
             # Parse a page using BeatifulSoup saving output to the variable
             soup = BeautifulSoup(driver.page_source, 'html.parser')
             
