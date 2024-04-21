@@ -7,7 +7,7 @@ In order to run this script I use **CentOS 7** or **8** with **Firefox** browser
 
 To run script copy and paste it to the file
 ```bash
-cat > tickets.py
+cat > tickets_upd.py
 ```
 For CentOS 7 setup of epel repository can be required
 ```bash
@@ -29,7 +29,7 @@ chmod +x tickets.py
 ```
 In order for Selenium to be able to communicate with the Firefox browser – download **GeckoDriver** for your system from this [link](https://github.com/mozilla/geckodriver/releases) via browser or use wget
 ```bash
-wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz -O geckodriver
+wget https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz -O geckodriver
 ```
 Untar the driver to the folder which is already included to the PATH environment variable. To check it run ***echo $PATH***
 ```bash
