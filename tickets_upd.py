@@ -227,7 +227,8 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
                     soup_check = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
 
                     if soup_check = None:
-                        find_
+                        # Click on Find button
+                        find_tickets.click()
                     else:
                         soup_found = True
                 
