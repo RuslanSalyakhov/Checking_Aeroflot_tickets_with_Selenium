@@ -222,7 +222,10 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
                 while not soup_found:
                     found_item = WebDriverWait(driver, 30).until(
                         EC.element_to_be_clickable((By.CSS_SELECTOR, ".button.button--wide.button--lg")))
-
+                    
+                    # Parse a page using BeatifulSoup saving output to the variable
+                    soup = BeautifulSoup(driver.page_source, 'html.parser')
+                    
                     # Checking if we can find price info for the active element
                     soup_check = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
 
