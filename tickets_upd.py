@@ -216,17 +216,32 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
             # Click on Find button
             find_tickets.click()
             
-            
+            soup_found = False
             try:
             # Wait till tickets info downloaded by checking if the element button is clickable
-                found_item = WebDriverWait(driver, 15).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, ".button.button--wide.button--lg")))
+                while not soup_found:
+                    found_item = WebDriverWait(driver, 30).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, ".button.button--wide.button--lg")))
+
+                    # Checking if we can find price info for the active element
+                    soup_check = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
+
+                    if soup_check = None:
+                        find_
+                    else:
+                        soup_found = True
+                
             except NoSuchElementException:
                 print("Cannot click on Find element and extract data!")
             time.sleep(4)
             # Parse a page using BeatifulSoup saving output to the variable
             soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+            soup_found = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
+
+            if soup_found == None:
             
+
             # Get tickets with price lower than a threshold
             ticket = get_cheap_tickets(soup, threshold, range_flag = True)
             
