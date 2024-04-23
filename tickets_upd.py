@@ -90,8 +90,12 @@ def get_cheap_tickets(soup, threshold, range_flag = False):
             price = i.find("div", class_='price-chart__item-price')
             day = i.find("div", class_='price-chart__item-day')
             number = i.find("div", class_='price-chart__item-number')
-            
-            if float(price.text.strip("i ")) < threshold:
+
+            if price is None or day is None or number is None:
+                print(f"None values found for price, day or number variables!!! price - {price}, day - {day}, number - {number}")
+                return tickets
+                
+            elif float(price.text.strip("i ")) < threshold:
                 tickets = ({'number': number.text, 'day': day.text, 'price': float(price.text.strip("i "))})
             print(f'{number.text} : {day.text} : {price.text.strip("i ")}')
             
