@@ -84,16 +84,18 @@ def get_cheap_tickets(soup, threshold, range_flag = False):
     
     elif range_flag:
         i = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
-        
-        price = i.find("div", class_='price-chart__item-price')
-        day = i.find("div", class_='price-chart__item-day')
-        number = i.find("div", class_='price-chart__item-number')
-        
-        if float(price.text.strip("i ")) < threshold:
-            tickets = ({'number': number.text, 'day': day.text, 'price': float(price.text.strip("i "))})
-        print(f'{number.text} : {day.text} : {price.text.strip("i ")}')
-        
-        return tickets
+        if i == None:
+            return tickets
+        else:
+            price = i.find("div", class_='price-chart__item-price')
+            day = i.find("div", class_='price-chart__item-day')
+            number = i.find("div", class_='price-chart__item-number')
+            
+            if float(price.text.strip("i ")) < threshold:
+                tickets = ({'number': number.text, 'day': day.text, 'price': float(price.text.strip("i "))})
+            print(f'{number.text} : {day.text} : {price.text.strip("i ")}')
+            
+            return tickets
             
         
 # check_tickets function checks tickets for specific date and strictly below the specific price threshhold
