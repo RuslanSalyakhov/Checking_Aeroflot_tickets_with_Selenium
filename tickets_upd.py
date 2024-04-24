@@ -134,7 +134,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
         element = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div/div/div[2]/div/section[1]/div/div[2]/button')))
 
-    except NoSuchElementException:
+    except:
         print("Loading page took too much time!")
     # Find and click on element for opening a list of subsidized programs
     subsidized_program = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div/div[2]/div/section[1]/div/div[2]/button')
@@ -185,7 +185,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
             # Wait till tickets info downloaded by checking if the element button is clickable
             found_items = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="chart-week-4"]/div[5]/div')))
-        except NoSuchElementException:
+        except:
             print("Cannot click on date element and extract data!")
         
         # Parse a page using BeatifulSoup saving output to the variable
@@ -239,7 +239,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
                     else:
                         soup_found = True
                 
-            except NoSuchElementException:
+            except:
                 print("Cannot click on Find element and extract data!")
             time.sleep(4)
             # Parse a page using BeatifulSoup saving output to the variable
