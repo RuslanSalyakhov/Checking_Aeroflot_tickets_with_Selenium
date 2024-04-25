@@ -18,7 +18,7 @@ TOKEN = "Some Telegram token"
 chat_id = "Some Telegram chat ID"
 
 # If tickets for asked dates and below the price threshold found send_message function sends a message to the Telegram chat
-def send_message(message: str, to_city: str):
+def send_message(message: list):
 
     mes = ''
 
@@ -27,12 +27,12 @@ def send_message(message: str, to_city: str):
     elif len(message) == 1:
         # Extract the element from the list
         message = message[0]
-        mes = f"Найден билет c ценой {message['price']}. \nДата: {message['day']} - {message['number']}"
+        mes = f"Найден билет c ценой {message['price']}. \nДата: {message['day']} - {message['number']}. \nВремя вылета: {', '.join(message['depart_time'])} \n"
     else:
         mes = ''
         for i in message:
-            mes +=  f"\nНайден билет c ценой {i['price']}. \nДата: {i['day']} - {i['number']}\n"
-    mes = f"Билеты в {str(to_city)}!\n" + mes + "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
+            mes +=  f"\nНайден билет c ценой {i['price']}. \nДата: {i['day']} - {i['number']} \nВремя вылета: {', '.join(i['depart_time'])} \n"
+    mes = "Билеты во Владивосток!\n" + mes + "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
     # Url to connect to Telegram bot
     #url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
     #print(requests.get(url).json())
@@ -90,14 +90,31 @@ def get_cheap_tickets(soup, threshold, range_flag = False):
             price = i.find("div", class_='price-chart__item-price')
             day = i.find("div", class_='price-chart__item-day')
             number = i.find("div", class_='price-chart__item-number')
-
+            
+            depart_time = []
+            
             if price is None or day is None or number is None:
                 print(f"None values found for price, day or number variables!!! price - {price}, day - {day}, number - {number}")
                 return tickets
                 
             elif float(price.text.strip("i ")) < threshold:
-                tickets = ({'number': number.text, 'day': day.text, 'price': float(price.text.strip("i "))})
-            print(f'{number.text} : {day.text} : {price.text.strip("i ")}')
+                # Find all div elements with class 'time-destination__from'
+                div_elements = soup.find_all("div", attrs={"class": "time-destination__from"})
+                
+                
+                if div_elements:
+             
+                    for div_element in div_elements:
+                        # Find the span tag with class 'time-destination__time' within the current div element
+                        time_element = div_element.find("span", class_="time-destination__time")
+                        if time_element:
+                            # Extract and print the text content of the time element
+                            time = time_element.text
+                            depart_time.append(time)
+                            #print(time)  # Output: 10:50
+                    
+                tickets = ({'number': number.text, 'day': day.text, 'price': float(price.text.strip("i ")), 'depart_time': depart_time})
+            print(f'{number.text} : {day.text} : {price.text.strip("i ")} : {", ".join(depart_time)}')
             
             return tickets
             
