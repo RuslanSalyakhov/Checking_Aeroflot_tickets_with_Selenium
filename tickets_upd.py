@@ -263,10 +263,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
             soup = BeautifulSoup(driver.page_source, 'html.parser')
 
             soup_found = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
-
-            if soup_found == None:
             
-
             # Get tickets with price lower than a threshold
             ticket = get_cheap_tickets(soup, threshold, range_flag = True)
             
