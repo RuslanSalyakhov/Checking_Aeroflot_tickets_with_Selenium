@@ -18,7 +18,7 @@ TOKEN = "Some Telegram token"
 chat_id = "Some Telegram chat ID"
 
 # If tickets for asked dates and below the price threshold found send_message function sends a message to the Telegram chat
-def send_message(message: list):
+def send_message(message: list, to_city: str):
 
     mes = ''
 
@@ -32,7 +32,7 @@ def send_message(message: list):
         mes = ''
         for i in message:
             mes +=  f"\nНайден билет c ценой {i['price']}. \nДата: {i['day']} - {i['number']} \nВремя вылета: {', '.join(i['depart_time'])} \n"
-    mes = "Билеты во Владивосток!\n" + mes + "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
+    mes = f"Билеты в {str(to_city)}!\n" + mes + "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
     # Url to connect to Telegram bot
     #url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
     #print(requests.get(url).json())
