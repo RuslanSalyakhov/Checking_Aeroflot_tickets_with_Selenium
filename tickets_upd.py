@@ -200,7 +200,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
 
         try:
             # Wait till tickets info downloaded by checking if the element button is clickable
-            found_items = WebDriverWait(driver, 10).until(
+            found_items = WebDriverWait(driver, 30).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="chart-week-4"]/div[5]/div')))
         except:
             print("Cannot click on date element and extract data!")
