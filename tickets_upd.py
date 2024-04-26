@@ -137,7 +137,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
     driver.get(url)
 
     # The pop up window confirm location can appear so for first we are going to wait of it 5 seconds
-    wait = WebDriverWait(driver, 20)
+    wait = WebDriverWait(driver, 60)
     element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.button.button--wide.js-notification-close')))
 
     # If pop up appeared and button is clickable the element will be returned as True so we can proceed with
@@ -148,7 +148,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
     # Waiting for subsidized program dropdown list appear to click on it
     try:
         # Wait till the required element is clickable on the page
-        element = WebDriverWait(driver, 15).until(
+        element = WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div/div/div[2]/div/section[1]/div/div[2]/button')))
 
     except:
