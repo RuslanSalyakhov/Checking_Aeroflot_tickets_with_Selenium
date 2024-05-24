@@ -5,6 +5,11 @@ I used this script to automate tracking of the subsidized tickets availability o
 ### How to run ###
 In order to run this script I use **CentOS 7** or **8** with **Firefox** browser.
 
+Switch to graphical UI if you are in console mode:
+```bash
+systemctl isolate graphical.target
+```
+
 To run script copy and paste it to the file
 ```bash
 cat > tickets_upd.py
@@ -17,10 +22,8 @@ yum -y update
 
 Install python3, pip (if not yet) and all libraries required by script
 ```bash
-sudo yum –y install python3
-sudo yum –y install python3-pip
-pip3 install bs4
-pip3 install selenium
+sudo yum –y install python3 python3-pip
+pip3 install bs4 requests selenium
 ```
 
 Make script file executable in order to run it
@@ -37,5 +40,5 @@ sudo tar -xzvf geckodriver -C /usr/local/bin
 ```
 Change to the script directory and run it providing required arguments
 ```bash
-./tickets_upd.py 11.08.2023 20000
+./tickets_upd.py 09.08.2024 15000 'Санкт-Петербург' 'Владивосток' 09.08.2024
 ```
