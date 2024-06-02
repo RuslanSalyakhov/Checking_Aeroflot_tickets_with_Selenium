@@ -136,10 +136,15 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
     # Open URL
     driver.get(url)
 
-    # The pop up window confirm location can appear so for first we are going to wait of it 5 seconds
-    wait = WebDriverWait(driver, 60)
-    element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.button.button--wide.js-notification-close')))
-
+    # The pop up window confirm location can appear so for first we are going to wait for 30 seconds
+    wait = WebDriverWait(driver, 30)
+    try:
+        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.button.button--wide.js-notification-close')))
+    
+    except: 
+        print("Confirm location window didn't appear!")
+        element = None
+        
     # If pop up appeared and button is clickable the element will be returned as True so we can proceed with
     if element:
         confirm_geo_button = driver.find_element(By.CSS_SELECTOR, ".button.button.button--wide.js-notification-close")
@@ -328,8 +333,15 @@ if __name__ == "__main__":
     run_flag = True
     while run_flag:
         print(f"\nRunning script for date: {args.from_date} ; price limit: {args.limit} - timestamp: {datetime.now()}")
-        return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
-
+        try:
+            return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
+        except:
+            print("Error during return_flag function execution occurred!")
+            # Wait for 5 seconds 
+            time.sleep(5)
+            print("Repeat to run the return_flag function")
+            return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
+        
         # Sleep 600 seconds - 10 minutes till next run.
         time.sleep(600)
 
