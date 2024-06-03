@@ -344,9 +344,6 @@ if __name__ == "__main__":
            
             print("Repeat to run the check_tickets function in 10 seconds")
             time.sleep(10)
-        
-        # Sleep 300 seconds - 5 minutes till next run.
-        time.sleep(300)
 
         if return_flag:
             # Setup counter to count number of send notifications via Telegram bot
@@ -356,8 +353,13 @@ if __name__ == "__main__":
             if count == 10:
                 # Break the loop
                 break
+                
         elif return_flag == None:
             continue
+            
         # Reset count when a value of return_flag is false         
-        elif not return_flag:
+        elif return_flag == False:
             count = 0
+            
+        # Sleep 300 seconds - 5 minutes till next run.
+        time.sleep(300)
