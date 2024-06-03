@@ -137,7 +137,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
     driver.get(url)
 
     # The pop up window confirm location can appear so for first we are going to wait for 30 seconds
-    wait = WebDriverWait(driver, 30)
+    wait = WebDriverWait(driver, 60)
     try:
         element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.button.button--wide.js-notification-close')))
     
@@ -153,7 +153,7 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
     # Waiting for subsidized program dropdown list appear to click on it
     try:
         # Wait till the required element is clickable on the page
-        element = WebDriverWait(driver, 30).until(
+        element = WebDriverWait(driver, 60).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div/div/div[2]/div/section[1]/div/div[2]/button')))
 
     except:
@@ -333,17 +333,20 @@ if __name__ == "__main__":
     run_flag = True
     while run_flag:
         print(f"\nRunning script for date: {args.from_date} ; price limit: {args.limit} - timestamp: {datetime.now()}")
+
+        return_flag = None
         try:
             return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
         except:
             print("Error during return_flag function execution occurred!")
-            # Wait for 5 seconds 
-            time.sleep(5)
-            print("Repeat to run the return_flag function")
-            return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
+            driver.quit()
+            # Wait for 10 seconds 
+           
+            print("Repeat to run the check_tickets function in 10 seconds")
+            time.sleep(10)
         
-        # Sleep 600 seconds - 10 minutes till next run.
-        time.sleep(600)
+        # Sleep 300 seconds - 5 minutes till next run.
+        time.sleep(300)
 
         if return_flag:
             # Setup counter to count number of send notifications via Telegram bot
@@ -353,6 +356,8 @@ if __name__ == "__main__":
             if count == 10:
                 # Break the loop
                 break
+        elif return_flag == None:
+            continue
         # Reset count when a value of return_flag is false         
         elif not return_flag:
             count = 0
