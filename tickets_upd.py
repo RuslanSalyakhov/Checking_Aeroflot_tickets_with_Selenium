@@ -158,10 +158,20 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
 
     except:
         print("Loading page took too much time!")
+        
     # Find and click on element for opening a list of subsidized programs
-    subsidized_program = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div/div[2]/div/section[1]/div/div[2]/button')
-    subsidized_program.click()
-
+    try:
+        # Wait till the required element is clickable on the page
+        subsidized_program = WebDriverWait(driver, 60).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div/div/div[2]/div/section[1]/div/div[2]/button')))
+        subsidized_program.click()
+        
+    except:
+        print("The subsidized programs loading took too much time!")
+        print("Quiting the driver...")
+        driver.quit()
+        return None
+        
     # Find and click the button for required program
     dv_button = driver.find_element(By.CSS_SELECTOR, ".button.button--clear.h-align--left")
     dv_button.click()
@@ -339,12 +349,11 @@ if __name__ == "__main__":
             return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
         except:
             print("Error during return_flag function execution occurred!")
-            driver.quit()
             # Wait for 10 seconds 
            
             print("Repeat to run the check_tickets function in 10 seconds")
             time.sleep(10)
-
+        
         if return_flag:
             # Setup counter to count number of send notifications via Telegram bot
             count += 1
@@ -353,10 +362,8 @@ if __name__ == "__main__":
             if count == 10:
                 # Break the loop
                 break
-                
         elif return_flag == None:
             continue
-            
         # Reset count when a value of return_flag is false         
         elif return_flag == False:
             count = 0
