@@ -27,11 +27,11 @@ def send_message(message: list, to_city: str):
     elif len(message) == 1:
         # Extract the element from the list
         message = message[0]
-        mes = f"Найден билет c ценой {message['price']}. \nДата: {message['day']} - {message['number']}. \nВремя вылета: {', '.join(message['depart_time'])} \n"
+        mes = f"Найден билет c ценой {message['price']} \nДата: {message['day']} - {message['number']} \nВремя вылета: {message['depart_time']} \n"
     else:
-        mes = ''
+        mes = 'Найдены билеты: \n'
         for i in message:
-            mes +=  f"\nНайден билет c ценой {i['price']}. \nДата: {i['day']} - {i['number']} \nВремя вылета: {', '.join(i['depart_time'])} \n"
+            mes +=  f"\nЦена: {i['price']} \nДата: {i['day']} - {i['number']}  \nВремя вылета: {i['depart_time']} \n"
     mes = f"Билеты в {str(to_city)}!\n" + mes + "https://www.aeroflot.ru/sb/subsidized/app/ru-ru#/search?_k=4l6mmq"
     # Url to connect to Telegram bot
     #url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
@@ -62,63 +62,46 @@ def get_range_dates(start_date_str: str, end_date_str: str):
   
 # get_cheap_tickets using as an input Beatiful soup's parser output and price threshold 
 # returning the list with nested dicts where the price is stricly below the threshold
-def get_cheap_tickets(soup, threshold, range_flag = False):
+def get_cheap_tickets(soup, threshold):
 
     # Initialize empty tickets list
     tickets = []
     
-    if not range_flag:
-        # Use Beatiful soup parsed page to get tickets info
-        items =  soup.find_all("div", attrs={"class":"price-chart__item"})
-        
-        # Iterate over tickets info list checking the tickets with prices lower than a threshold
-        for i in items:
-            price = i.find("div", class_='price-chart__item-price')
-            day = i.find("div", class_='price-chart__item-day')
-            number = i.find("div", class_='price-chart__item-number')
-            if float(price.text.strip("i ")) < threshold:
-                tickets.append({'number': number.text, 'day': day.text, 'price': float(price.text.strip("i "))})
-            print(f'{number.text} : {day.text} : {price.text.strip("i ")}')
-            
+    i = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
+    if i == None:
         return tickets
-    
-    elif range_flag:
-        i = soup.find("div", attrs={"class":"price-chart__item price-chart__item--active"})
-        if i == None:
+    else:
+        price = i.find("div", class_='price-chart__item-price')
+        day = i.find("div", class_='price-chart__item-day')
+        number = i.find("div", class_='price-chart__item-number')
+
+        if price is None or day is None or number is None:
+            print(f"None values found for price, day or number variables!!! price - {price}, day - {day}, number - {number}")
             return tickets
-        else:
-            price = i.find("div", class_='price-chart__item-price')
-            day = i.find("div", class_='price-chart__item-day')
-            number = i.find("div", class_='price-chart__item-number')
+
+        elif float(price.text.strip("i ")) < threshold:
+            # Find tickets' elements with class 'row flight-search__inner'
+            locate_ticket_box = soup.find_all("div", attrs={"class":"row flight-search__inner"})
+            #div_elements = soup.find_all("div", attrs={"class": "time-destination__from"})
             
-            depart_time = []
-            
-            if price is None or day is None or number is None:
-                print(f"None values found for price, day or number variables!!! price - {price}, day - {day}, number - {number}")
-                return tickets
-                
-            elif float(price.text.strip("i ")) < threshold:
-                # Find all div elements with class 'time-destination__from'
-                div_elements = soup.find_all("div", attrs={"class": "time-destination__from"})
-                
-                
-                if div_elements:
-             
-                    for div_element in div_elements:
-                        # Find the span tag with class 'time-destination__time' within the current div element
-                        time_element = div_element.find("span", class_="time-destination__time")
-                        if time_element:
-                            # Extract and print the text content of the time element
-                            time = time_element.text
-                            depart_time.append(time)
-                            #print(time)  # Output: 10:50
+            if locate_ticket_box:
+                # Since we can have multiple tickets for the same date with price lower than a threshold we track the sequence number of each ticket
+                ticket_seq = 0
+                for t in locate_ticket_box:
+                    price_t = t.find("div", attrs={"class":"flight-search__price-text"})
+                    price_t = float(price_t.text.strip("i "))
                     
-                tickets = ({'number': number.text, 'day': day.text, 'price': float(price.text.strip("i ")), 'depart_time': depart_time})
-            print(f'{number.text} : {day.text} : {price.text.strip("i ")} : {", ".join(depart_time)}')
-            
-            return tickets
-            
-        
+                    depart_t = t.find("span", attrs={"class": "time-destination__time"})
+                    
+                    if price_t and depart_t and (price_t < threshold):
+                        
+                        tickets.append({'number': number.text, 'day': day.text, 'price': price_t, 'depart_time': depart_t.text, 'ticket_sequence': ticket_seq})   
+                     
+                    print(f'{number.text} : {day.text} : {price_t} : {depart_t.text} : ord - {ticket_seq}')
+                    ticket_seq += 1
+
+        return tickets
+                    
 # check_tickets function checks tickets for specific date and strictly below the specific price threshhold
 def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток', end_date = ''):
     # For Google Chrome webdriver
