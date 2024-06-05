@@ -327,10 +327,10 @@ if __name__ == "__main__":
         return_flag = None
         try:
             return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
-        except:
-            print("Error during return_flag function execution occurred!")
+            
+        except Exception as e:
+            print("Error during return_flag function execution occurred! - ", e)
             # Wait for 10 seconds 
-           
             print("Repeat to run the check_tickets function in 10 seconds")
             time.sleep(10)
         
