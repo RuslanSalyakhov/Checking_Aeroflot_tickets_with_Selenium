@@ -266,13 +266,9 @@ def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт
             ticket = get_cheap_tickets(soup, threshold)
             
             
-            if len(ticket) == 1:
-                # Append the ticket to the tickets list
-                tickets.append(ticket)   
-
-            elif len(ticket) > 1:
+            if len(ticket) >= 1:
                 # Extend the ticket if there are more than one element in the ticket list
-                tickets.extend(ticket)
+                tickets.extend(ticket)  
 
     if len(tickets) == 0:
 
