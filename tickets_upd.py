@@ -103,7 +103,7 @@ def get_cheap_tickets(soup, threshold):
         return tickets
                     
 # check_tickets function checks tickets for specific date and strictly below the specific price threshhold
-def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток', end_date = ''):
+def check_tickets(date= '23.05.2024', threshold = 15000, from_city = 'Санкт-Петербург', to_city = 'Владивосток', end_date = '', depart_time = ''):
     # For Google Chrome webdriver
     #driver = webdriver.Chrome(executable_path=r"C:\Users\seymo\Documents\chromium\chromedriver.exe")
     # Starting from Selenium version Selenium 4.6 or greater
@@ -312,7 +312,13 @@ if __name__ == "__main__":
     parser.add_argument('to_city', type=str, help='The destination city')
 
     # Add argument for the end date of date range
-    parser.add_argument('end_date', type=str, help='The end date of the date range in the format: DD.MM.YYYY; i.e 20.08.2023')
+    #parser.add_argument('end_date', type=str, help='The end date of the date range in the format: DD.MM.YYYY; i.e 20.08.2023')
+
+    # Add optional positional argument for the end date of date range
+    parser.add_argument('end_date', type=str, nargs='?', default='', help='The end date of the date range in the format: DD.MM.YYYY; i.e 20.08.2023 (optional)')
+
+    # Add optional argument for the flight departure time
+    parser.add_argument('--depart_time', type=int, default='', help='The flight departure time (default: '')')
 
     args = parser.parse_args()
 
@@ -326,7 +332,7 @@ if __name__ == "__main__":
 
         return_flag = None
         try:
-            return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date)
+            return_flag = check_tickets(date=args.from_date, threshold=args.limit, from_city=args.from_city, to_city=args.to_city, end_date=args.end_date, depart_time = args.depart_time)
             
         except Exception as e:
             print("Error during return_flag function execution occurred! - ", e)
