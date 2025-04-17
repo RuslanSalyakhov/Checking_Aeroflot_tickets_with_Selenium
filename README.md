@@ -10,6 +10,13 @@ Switch to graphical UI if you are in console mode:
 systemctl isolate graphical.target
 ```
 
+If GUI is not available install it
+```bash
+yum -y update
+yum groupinstall -y "Server with GUI"
+systemctl set-default graphical.target
+systemctl isolate graphical.target
+```
 To run script copy and paste it to the file
 ```bash
 cat > tickets_upd.py
